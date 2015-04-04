@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <style>
+            body {background-color:black}
+        </style>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>Dashboard</title>
+
+        <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+        <script type="text/javascript" src="static/gauge.js"></script>
+
+        <script>
+
+            var gauges = [];
+            var speed_max = 100;
+            var tach_max = 15;
+            var fuel_max = 100;
+            var up = true;
+
+            function sweep(i) {
+                setTimeout(function() {
+                    updateGauge("speed", speed_max*(i/100));
+                    updateGauge("tach", tach_max*(i/100));
+                    updateGauge("fuel", fuel_max*(i/100));
+                    if (i == 0) {
+                        return;
+                    } else if (i == 100) {
+                        i--;
+                        up = false;
+                        sweep(i);
+                    } else if (i < 100 && up) {
+                        i++;
+                        sweep(i);
+                    } else if (i > 0) {
+                        i--;
+                        sweep(i);
+                    }
+                }, 5);
+            }
+
+            //Strictly for demoing
+            //createGauge(name,label,size,min,max,yellowlevel,redlevel);
+            function createGauges() {
+                var speed_max = 100;
+                var tach_max = 15;
+                var fuel_max = 100;
+                createGauge("speed", "Speed", 200, 0, speed_max, 50, 70);
+                createGauge("tach", "RPM x 1000", 500, 0, tach_max, 12, 12);
+                createGauge("fuel", "Fuel", 200, 0, fuel_max, 50, 75);
+                var i = 1;
+                sweep(i);
+            }
+
+        </script>
+
+    </head>
+
+    <body onload="initialize()">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{{
+            url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+
+        <script type=text/javascript>
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script>
+        <span id="speed_gauge"></span>
+        <span id="tach_gauge"></span>
+        <span id="fuel_gauge"></span>
+    </body>
+
+</html>
