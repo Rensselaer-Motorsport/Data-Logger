@@ -13,12 +13,21 @@
 function updateGauge(gauge, value) {
     gauges[gauge].redraw(value);
 }
-            
+
 //'creates the gauge objects', and sets a javascript interval to trigger updating values
 function initialize() {
-    createGauges();
+    setTimeout(function() {
+        pausecomp(1000);
+        fade(1.0);
+        //while ($("#splash").css("opacity") != 0) {
+            //console.log($("#splash").css("opacity"));
+        //}
+        var logo = document.getElementById("splash");
+        logo.parentNode.removeChild(logo);
+        createGauges();
+    }, 0);
 }
-            
+
 //*****************************************************************
             
 //*****************************************************************

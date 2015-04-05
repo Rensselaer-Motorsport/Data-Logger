@@ -3,6 +3,9 @@
     <head>
         <style>
             body {background-color:black}
+            #splash {
+                opacity: 1.0;
+            }
         </style>
         <meta http-equiv="content-type" content="text/html;charset=utf-8">
         <title>Dashboard</title>
@@ -10,6 +13,10 @@
         <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
         <script type="text/javascript" src="static/gauge.js"></script>
 
+        <div id="splash">
+            <center><img id="logo" src="static/img/logo.png"></center>
+        </div>
+        
         <script>
 
             var gauges = [];
@@ -18,6 +25,21 @@
             var fuel_max = 100;
             var up = true;
 
+            function pausecomp(ms) {
+                ms += new Date().getTime();
+                while (new Date() < ms){}
+            }
+            
+            function fade(i) {
+                setTimeout(function() {
+                    document.getElementById("splash").style.opacity = i;
+                    if (i > 0) {
+                        i -= 0.1;
+                        fade(i);
+                    }
+                }, 10);
+            };
+            
             function sweep(i) {
                 setTimeout(function() {
                     updateGauge("speed", speed_max*(i/100));
